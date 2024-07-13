@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "songsara-backend"
+version = "0.1.0"
+description = ""
+authors = ["meraj <merajpiri83@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.7"
+djangorestframework = "^3.15.2"
+pillow = "^10.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
