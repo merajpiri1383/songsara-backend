@@ -29,8 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # internal apps 
     'user.apps.UserConfig',
-    # external apps 
-    'rest_framework',
+    'authentication.apps.AuthenticationConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +62,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS" : "drf_spectacular.openapi.AutoSchema"
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -72,6 +74,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE" : "BACKEND-SONGSARA",
+    "VERSION" : "1.0.0",
+    "DESCRIPTION" : "API of songsara built with django rest framework ."
 }
 
 
