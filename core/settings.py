@@ -1,4 +1,8 @@
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%z33yeo!51j@f#*k$q8b2k)in5gjf4p6%0)geytvlc7e=dp@pl'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,6 +34,9 @@ INSTALLED_APPS = [
     # internal apps 
     'user.apps.UserConfig',
     'authentication.apps.AuthenticationConfig',
+    # external apps 
+    'rest_framework',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +54,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / "templates"
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+# rest framework config
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS" : "drf_spectacular.openapi.AutoSchema"
 }
@@ -75,6 +85,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# drf spectacular config
 
 SPECTACULAR_SETTINGS = {
     "TITLE" : "BACKEND-SONGSARA",
@@ -123,3 +135,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# email config
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 465 
+EMAIL_USE_SSL = True
+
+# celery config 
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL","redis://localhost:6379/")
+CELERY_BACKEND_URL = os.environ.get("CELERY_BACKEND_URL","redis://localhost:6379/")

@@ -27,4 +27,5 @@ def client() :
 def urls() : 
     return dict(
         register = reverse("register"),
+        activate = reverse("activate") , 
     )

@@ -12,7 +12,9 @@ class RegisterSerializer(serializers.ModelSerializer) :
         
     def validate(self,data) :
         if not regex_password.findall(data.get("password")) : 
-            raise ValidationError({"detail":"password must contains of number and character and must be at leadt 8 character."})
+            raise ValidationError({"detail":"""
+            password must contains of number and character and must be at leadt 8 character.
+        """})
         return super().validate(data)
     
     def create(self,vd) : 

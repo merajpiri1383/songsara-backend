@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Activation Email</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            .container{
+                background-color : rgba(117, 117, 255, 0.075);
+                padding: 30px;
+                display: flex;
+                align-items: center;
+                justify-items: center;
+                height: 500px;
+            }
+            .content{
+                width: 70%;
+                margin: auto;
+                padding: 30px;
+                border-radius: 20px;
+                box-shadow: 1px 1px 7px 0px rgba(0, 0, 0, 0.148);
+                font-size: 20px;
+            }
+            span {
+                font-weight: bolder;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="content">
+                your activation code is <span>{{ code }}</span>
+            </div>
+        </div>
+    </body>
+</html>
