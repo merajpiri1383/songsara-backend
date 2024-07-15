@@ -6,12 +6,16 @@ from django.urls import reverse
 
 @pytest.fixture
 def user() : 
-    return get_user_model().objects.create(
+    user = get_user_model().objects.create(
         email = "test@gmail.com",
-        username = "test-user" 
+        username = "test-user" ,
+        is_active = True
     )
+    user.set_password("password")
+    user.save()
+    return user
 
-@pytest.fixture 
+@pytest.fixture  
 def user_data() : 
     return dict(
         email = "test_user@gmail.com",
@@ -28,4 +32,5 @@ def urls() :
     return dict(
         register = reverse("register"),
         activate = reverse("activate") , 
+        login = reverse("login") ,
     )

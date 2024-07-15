@@ -22,6 +22,7 @@ def send_otp_to_user(id) :
     email.send()
     sys.stdout.write(user.otp)
     sleep(120)
+    user = get_user_model().objects.get(id=id)
     if not user.is_active : 
         user.delete()
     else : 

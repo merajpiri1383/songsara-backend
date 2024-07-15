@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 import os
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     # external apps 
     'rest_framework',
     'drf_spectacular',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +75,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # rest framework config
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS" : "drf_spectacular.openapi.AutoSchema"
+    "DEFAULT_SCHEMA_CLASS" : "drf_spectacular.openapi.AutoSchema" , 
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
+
+# JWT config 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME" : timedelta(minutes=2),
+    "REFRESH_TOKEN_LIFETIME" : timedelta(minutes=3),
 }
 
 # Database

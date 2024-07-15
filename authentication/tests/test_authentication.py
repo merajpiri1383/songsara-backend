@@ -1,4 +1,5 @@
 import pytest 
+from django.contrib.auth import get_user_model
 
 @pytest.mark.django_db
 def test_registeration(urls,client,user_data) : 
@@ -13,9 +14,10 @@ def test_registeration(urls,client,user_data) :
 @pytest.mark.django_db
 def test_activation(urls,client,user) : 
 
+
     payload = {
         "id" : user.id , 
-        "otp" : user.otp , 
+        "otp" : user.otp ,  
     }
 
     response = client.post(urls.get("activate"),payload) 
@@ -23,3 +25,16 @@ def test_activation(urls,client,user) :
     assert response.status_code == 200
     assert response.data["email"] == user.email
     assert response.data["is_active"]
+
+@pytest.mark.django_db
+def test_login(urls,client,user) : 
+    
+    payload = {
+        "email" : user.email , 
+        "password" : "password"
+    }
+    response = client.post(urls.get("login"),payload)
+
+    assert response.status_code == 200 
+    assert "access_token" in response.data 
+    assert "refresh_token" in response.data 
