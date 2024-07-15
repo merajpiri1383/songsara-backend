@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
+from authentication.tasks import send_otp_to_user
 import re 
 
 regex_password = re.compile("(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}")
@@ -24,15 +25,17 @@ class RegisterSerializer(serializers.ModelSerializer) :
         user.save()
         return user
     
+
+
 class ActivateAcountSerializer(serializers.Serializer) : 
-    id = serializers.UUIDField(required=True)
-    otp = serializers.SlugField(required=True)
+    email = serializers.EmailField(required=True)
+    otp = serializers.SlugField(required=True,write_only=True)
 
     def validate(self,data) : 
         try : 
-            self.user = get_user_model().objects.get(id=data.get("id"))
+            self.user = get_user_model().objects.get(email=data.get("email"))
         except : 
-            raise ValidationError({"id" : "user with this id does not exist ."})
+            raise ValidationError({"id" : "user with this email does not exist ."})
         return data
     
     def create(self,validated_data) : 
@@ -46,7 +49,6 @@ class ActivateAcountSerializer(serializers.Serializer) :
     
     def to_representation(self,instance) : 
         context = super().to_representation(instance)
-        del context["otp"]
         refresh_token = RefreshToken.for_user(instance)
         context["access_token"] = str(refresh_token.access_token)
         context["refresh_token"] = str(refresh_token)
@@ -78,3 +80,33 @@ class LoginSerializer(serializers.Serializer) :
         context["refresh_token"] = str(refresh_token)
         context["access_token"] = str(refresh_token.access_token)
         return context
+
+
+class ForgetPasswordSerializer(serializers.Serializer) : 
+    email = serializers.EmailField(required=True)
+
+    def validate(self,attrs) : 
+        try : 
+            user = get_user_model().objects.get(email=attrs.get("email"))
+        except : 
+            raise ValidationError({"email" : "user with this email does not exist ."})
+        send_otp_to_user.apply_async(args=[user.id])
+        return attrs
+
+class ResetPasswordSerializer(serializers.Serializer) : 
+    email = serializers.EmailField(required=True)
+    new_password = serializers.SlugField(write_only=True,required=True)
+
+    def validate(self,attrs) : 
+        try : 
+            self.user = get_user_model().objects.get(email=attrs.get("email"))
+        except : 
+            raise ValidationError({"email":"user with this email does not exist ."})
+        if not regex_password.findall(attrs.get("new_password")) : 
+            raise ValidationError("password must contains of number and character and must be at leadt 8 character.")
+        return super().validate(attrs)
+    
+    def create(self,validated_data) : 
+        self.user.set_password(validated_data.get("new_password"))
+        self.user.save()
+        return self.user

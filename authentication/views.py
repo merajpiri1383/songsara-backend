@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response 
 from rest_framework import status 
-from authentication.serializers import (RegisterSerializer,ActivateAcountSerializer,LoginSerializer)
+from authentication.serializers import (RegisterSerializer,ActivateAcountSerializer,
+                    LoginSerializer,ForgetPasswordSerializer,ResetPasswordSerializer)
 from authentication.tasks import send_otp_to_user
 from user.serializers import UserSerializer
 from drf_spectacular.utils import extend_schema,OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
+from utils.permissions import IsOwnOrNot
 
 
 
@@ -48,15 +50,15 @@ class RegisterAPIView(APIView) :
 
 class ActivateEmailAPIView(APIView) : 
 
-    serializer_class = UserSerializer
+    serializer_class = ActivateAcountSerializer
 
     @extend_schema(
             responses={200 : UserSerializer},
             parameters= [
                 OpenApiParameter(
-                    name = "id",
+                    name = "email",
                     required= True,
-                    type= OpenApiTypes.UUID,
+                    type= OpenApiTypes.EMAIL,
                 ),
                 OpenApiParameter(
                     name = "otp",
@@ -104,3 +106,55 @@ class LoginAPIView(APIView) :
             return Response(serialzier.data)
         else : 
             return Response(serialzier.errors,status.HTTP_400_BAD_REQUEST)
+
+class ForgetPasswordAPIView(APIView) : 
+    serializer_class = ForgetPasswordSerializer
+
+    @extend_schema(
+            parameters=[
+                OpenApiParameter(
+                    name="email",
+                    required=True,
+                    type=OpenApiTypes.EMAIL,
+                ),
+                OpenApiParameter(
+                    name = "otp",
+                    required= True,
+                    type= OpenApiTypes.INT
+                )
+            ]
+    )
+    def post(self,request) : 
+        serializer = ForgetPasswordSerializer(data=request.data)
+        if serializer.is_valid() :
+            return Response({"detail" : "email is sent ."})
+        else :
+            return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPasswordAPIView(APIView) : 
+    permission_classes = [IsOwnOrNot]
+    serializer_class = ResetPasswordSerializer
+    
+    @extend_schema(
+            parameters= [
+                OpenApiParameter(
+                name = "email",
+                required=True,
+                type=OpenApiTypes.EMAIL
+            ),
+            OpenApiParameter(
+                name="new_password",
+                required=True,
+                type=OpenApiTypes.PASSWORD,
+            )
+            ]
+    )
+    def post(self,request) : 
+        serializer = ResetPasswordSerializer(data=request.data)
+        if serializer.is_valid() : 
+            user = serializer.save()
+            self.check_object_permissions(request,user)
+            return Response(serializer.data)
+        else : 
+            return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
