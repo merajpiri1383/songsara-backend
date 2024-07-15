@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'authentication.apps.AuthenticationConfig',
     'mood.apps.MoodConfig',
+    'artist.apps.ArtistConfig',
     # external apps 
     'rest_framework',
     'drf_spectacular',
@@ -160,3 +161,12 @@ EMAIL_USE_SSL = True
 # celery config 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL","redis://localhost:6379/")
 CELERY_BACKEND_URL = os.environ.get("CELERY_BACKEND_URL","redis://localhost:6379/")
+
+# static files 
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
+# media files 
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "media/"
