@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
-from uuid import uuid4
 from random import randint
 from user.manager import UserManager
 
 class User(AbstractBaseUser,PermissionsMixin) :
-    id = models.UUIDField(default=uuid4(),primary_key=True)
     email = models.EmailField(unique=True)
     username = models.SlugField(unique=True)
     joind = models.DateTimeField(auto_now_add=True)

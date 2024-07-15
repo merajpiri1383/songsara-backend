@@ -16,12 +16,13 @@ def test_activation(urls,client,user) :
 
 
     payload = {
-        "id" : user.id , 
+        "email" : user.email , 
         "otp" : user.otp ,  
     }
 
     response = client.post(urls.get("activate"),payload) 
 
+    print(response.data)
     assert response.status_code == 200
     assert "access_token" in response.data
     assert "refresh_token" in response.data

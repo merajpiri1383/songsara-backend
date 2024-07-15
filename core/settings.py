@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # internal apps 
     'user.apps.UserConfig',
     'authentication.apps.AuthenticationConfig',
+    'mood.apps.MoodConfig',
     # external apps 
     'rest_framework',
     'drf_spectacular',
@@ -83,8 +84,8 @@ REST_FRAMEWORK = {
 
 # JWT config 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME" : timedelta(minutes=2),
-    "REFRESH_TOKEN_LIFETIME" : timedelta(minutes=3),
+    "ACCESS_TOKEN_LIFETIME" : timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME" : timedelta(hours=3),
 }
 
 # Database
