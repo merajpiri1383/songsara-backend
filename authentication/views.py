@@ -1,11 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response 
 from rest_framework import status 
-from authentication.serializers import RegisterSerializer
+from authentication.serializers import (RegisterSerializer,ActivateAcountSerializer,LoginSerializer)
 from authentication.tasks import send_otp_to_user
-from django.contrib.auth import get_user_model
 from user.serializers import UserSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
 from drf_spectacular.utils import extend_schema,OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
@@ -68,26 +66,17 @@ class ActivateEmailAPIView(APIView) :
             ]
     )
     def post(self,request) :
-        if not request.data.get("id") : 
-            return Response({"detail":"id field is required ."},status.HTTP_400_BAD_REQUEST)
-        if not request.data.get("otp") : 
-            return Response({"detail":"otp field is required ."},status.HTTP_400_BAD_REQUEST)
-        try : 
-            user = get_user_model().objects.get(id = request.data.get("id"))
-        except : 
-            return Response({"detail" : "user with this id does not exist"},status.HTTP_400_BAD_REQUEST)
-        if user.otp == request.data.get("otp") : 
-            user.is_active = True 
-            user.save()
-            serializer = UserSerializer(instance=user)
+        serializer = ActivateAcountSerializer(data=request.data)
+        if serializer.is_valid() : 
+            serializer.save()
             return Response(serializer.data)
-        return Response({"detail":"otp code is incorrect ."},status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
     
 
 
 
 class LoginAPIView(APIView) : 
-    serializer_class = UserSerializer
+    serializer_class = LoginSerializer
 
     @extend_schema(
             description= "username and email , one of them is required .",
@@ -110,28 +99,8 @@ class LoginAPIView(APIView) :
             ]
     )
     def post(self,request) :
-        if not request.data.get("email") and not request.data.get("username")  :
-            return Response({"detail":"email or user name is required"},status.HTTP_400_BAD_REQUEST)
-        if not request.data.get("password"): 
-            return Response({"detail":"password is required"},status.HTTP_400_BAD_REQUEST)
-        
-        try : 
-            if request.data.get("email") : 
-                user = get_user_model().objects.get(email=request.data.get("email"))
-            else : 
-                user = get_user_model().objects.get(username=request.data.get("username"))
-        except : 
-            return Response({"detail":"user with this username / email does not exist ."},
-                    status.HTTP_400_BAD_REQUEST)
-        
-        if not user.is_active : 
-            return Response({"detail":"user is not active ."},status.HTTP_400_BAD_REQUEST)
-        
-        if not user.check_password(request.data.get("password")) : 
-            return Response({"detail":"incorrect password ."},status.HTTP_400_BAD_REQUEST)
-        
-        refresh_token = RefreshToken.for_user(user)
-        data = UserSerializer(user).data
-        data["refresh_token"] = str(refresh_token)
-        data["access_token"] = str(refresh_token.access_token)
-        return Response(data)
+        serialzier = LoginSerializer(data=request.data)
+        if serialzier.is_valid() : 
+            return Response(serialzier.data)
+        else : 
+            return Response(serialzier.errors,status.HTTP_400_BAD_REQUEST)

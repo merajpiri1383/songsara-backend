@@ -23,8 +23,8 @@ def test_activation(urls,client,user) :
     response = client.post(urls.get("activate"),payload) 
 
     assert response.status_code == 200
-    assert response.data["email"] == user.email
-    assert response.data["is_active"]
+    assert "access_token" in response.data
+    assert "refresh_token" in response.data
 
 @pytest.mark.django_db
 def test_login(urls,client,user) : 
