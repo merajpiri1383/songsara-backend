@@ -10,6 +10,7 @@ urlpatterns = [
     path('account/',include("authentication.urls")),
     path('mood/',include('mood.urls')),
     path('artist/',include('artist.urls')),
+    path('album/',include('album.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     re_path(r'^media/(?P<path>.*)$',serve,{"document_root":settings.MEDIA_ROOT}),
 ]

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'mood.apps.MoodConfig',
     'artist.apps.ArtistConfig',
+    'album.apps.AlbumConfig',
     # external apps 
     'rest_framework',
     'drf_spectacular',

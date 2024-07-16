@@ -11,15 +11,15 @@ import sys
 def send_otp_to_user(id) : 
     sleep(2)
     user = get_user_model().objects.get(id=id)
-    context = {"code":user.otp}
-    content = render_to_string("send_email.html",context=context) 
-    email = EmailMultiAlternatives(
-        from_email=settings.EMAIL_HOST_USER,
-        to=[user.email],
-        subject="activation code"
-    )
-    email.attach_alternative(content,"text/html")
-    email.send()
+    # context = {"code":user.otp}
+    # content = render_to_string("send_email.html",context=context) 
+    # email = EmailMultiAlternatives(
+    #     from_email=settings.EMAIL_HOST_USER,
+    #     to=[user.email],
+    #     subject="activation code"
+    # )
+    # email.attach_alternative(content,"text/html")
+    # email.send()
     sys.stdout.write(user.otp)
     sleep(120)
     user = get_user_model().objects.get(id=id)
