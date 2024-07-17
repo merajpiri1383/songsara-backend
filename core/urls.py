@@ -13,6 +13,7 @@ urlpatterns = [
     path('album/',include('album.urls')),
     path('genre/',include('genre.urls')),
     path('playlist/',include('playlist.urls')),
+    path('track/',include('track.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     re_path(r'^media/(?P<path>.*)$',serve,{"document_root":settings.MEDIA_ROOT}),
 ]

@@ -7,7 +7,7 @@ class Album(models.Model) :
     name = models.CharField(max_length=300,unique=True)
     slug = models.SlugField(null=True,blank=True,unique=True,max_length=300)
     image = models.ImageField(upload_to="artist/images")
-    moods = models.ManyToManyField(Mood)
+    moods = models.ManyToManyField(Mood,blank=True)
     artist = models.ForeignKey(Artist,on_delete=models.CASCADE,related_name="albums")
     created = models.DateTimeField(auto_now_add=True)
 
