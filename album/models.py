@@ -15,6 +15,5 @@ class Album(models.Model) :
         return f'{self.name} {self.artist}'
     
     def save(self,**kwargs) : 
-        if not self.slug : 
-            self.slug = slugify(self.name,allow_unicode=True)
+        self.slug = slugify(self.name,allow_unicode=True)
         return super().save(**kwargs)

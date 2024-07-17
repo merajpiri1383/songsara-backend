@@ -37,7 +37,7 @@ artist_data = dict(
 )
 
 data_album_1 = {
-    "name" : "alnum 1",
+    "name" : "album 1",
     "slug" : "album-1",
     "image" : SimpleUploadedFile(
         content = open(image_path,"rb").read(),
@@ -47,7 +47,7 @@ data_album_1 = {
 }
 
 data_album_2 = {
-    "name" : "alnum 2",
+    "name" : "album 2",
     "slug" : "album-2",
     "image" : SimpleUploadedFile(
         content = open(image_path,"rb").read(),

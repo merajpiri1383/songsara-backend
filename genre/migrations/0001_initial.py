@@ -12,14 +12,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Artist',
+            name='Genre',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=300)),
-                ('slug', models.SlugField(blank=True, null=True)),
-                ('image', models.ImageField(upload_to='artist/images')),
-                ('topic', models.CharField(blank=True, max_length=300)),
-                ('description', models.TextField(blank=True, null=True)),
+                ('slug', models.SlugField(blank=True, max_length=300, null=True)),
+                ('text', models.TextField()),
             ],
         ),
     ]
