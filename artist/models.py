@@ -12,5 +12,6 @@ class Artist(models.Model) :
         return str(self.name)
     
     def save(self,**kwargs) : 
-        self.slug = slugify(self.name,allow_unicode=True)
+        if not self.slug : 
+            self.slug = slugify(self.name,allow_unicode=True)
         return super().save(**kwargs)

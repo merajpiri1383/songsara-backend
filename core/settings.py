@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'artist.apps.ArtistConfig',
     'album.apps.AlbumConfig',
     'genre.apps.GenreConfig',
+    'playlist.apps.PlaylistConfig',
     # external apps 
     'rest_framework',
     'drf_spectacular',
