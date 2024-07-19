@@ -1,28 +1,50 @@
 import pytest
+from mood.tests import MoodTest
+from mood.models import Mood
 
-@pytest.mark.django_db
-def test_get_list(urls,client,mood) : 
+class Test(MoodTest) : 
     
-    response = client.get(urls.get("mood_list"))
+    @pytest.mark.django_db
+    def test_get_list(self) : 
+        response = self.client.get(self.list_url)
+        assert response.status_code == 200
+        assert response.data[0]["slug"] == self.mood.slug
 
-    assert response.status_code == 200
-    assert response.data[0]["slug"] == mood.slug
-
-@pytest.mark.django_db
-def test_create_mood(urls,client,mood_data,users) : 
-
-    client.force_authenticate(users.get("staff_user"))
-
-    response = client.post(urls["mood_list"],mood_data["data_2"])
-
-    assert response.status_code == 201 
-    assert response.data.get("slug") == mood_data["data_2"]["slug"]
-
-
-@pytest.mark.django_db
-def test_get_mood(urls,client,mood) : 
-
-    response = client.get(urls.get("mood_detail"))
+    @pytest.mark.django_db
+    def test_post_mood_by_normal_user(self) : 
+        self.client.force_authenticate(self.normal_user)
+        response = self.client.post(self.list_url,data=self.data)
+        assert response.status_code == 403
     
-    assert response.status_code == 200
-    assert response.data.get("slug") == mood.slug
+    @pytest.mark.django_db
+    def test_post_by_staff_user(self) : 
+        self.client.force_authenticate(self.staff_user)
+        response = self.client.post(self.list_url,data=self.data)
+        assert response.status_code == 201
+        assert Mood.objects.count() == 2
+        assert response.data["slug"] == self.data["slug"]
+    
+    @pytest.mark.django_db
+    def test_get_detail(self) : 
+        response = self.client.get(self.detail_url)
+        assert response.status_code == 200
+        assert response.data["slug"] == self.mood.slug
+    
+    @pytest.mark.django_db
+    def test_delete_by_normal_user(self) : 
+        self.client.force_authenticate(self.normal_user)
+        response = self.client.delete(self.detail_url)
+        assert response.status_code == 403
+    
+    @pytest.mark.django_db
+    def test_delete_by_staff_user(self) : 
+        self.client.force_authenticate(self.staff_user)
+        response = self.client.delete(self.detail_url)
+        assert response.status_code == 204 
+        assert Mood.objects.count() == 0 
+    
+    @pytest.mark.django_db
+    def test_put(self) : 
+        self.client.force_authenticate(self.staff_user)
+        response = self.client.put(self.detail_url,{"name" : "name_edited"})
+        assert response.status_code == 200

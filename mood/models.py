@@ -4,6 +4,7 @@ from django.utils.text import slugify
 class Mood(models.Model) : 
     name = models.CharField(max_length=300,unique=True)
     slug = models.SlugField(unique=True,null=True,blank=True)
+    image = models.ImageField(upload_to="mood/images")
     
     def __str__(self) : 
         return f"Mood {self.name}"
