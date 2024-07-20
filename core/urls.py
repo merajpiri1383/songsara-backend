@@ -6,6 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('user/',include("user.urls")),
     path('admin/', admin.site.urls),
     path('account/',include("authentication.urls")),
     path('mood/',include('mood.urls')),

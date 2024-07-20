@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 from authentication.tasks import send_otp_to_user
+from user.serializers import UserSerializer
 import re 
 
 regex_password = re.compile("(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}")
@@ -56,9 +57,9 @@ class ActivateAcountSerializer(serializers.Serializer) :
     
 
 class LoginSerializer(serializers.Serializer) :
-    email = serializers.EmailField(required=False)
-    username = serializers.SlugField(required=False)
-    password = serializers.SlugField(required=True)
+    email = serializers.EmailField(required=False,write_only=True)
+    username = serializers.SlugField(required=False,write_only=True)
+    password = serializers.SlugField(required=True,write_only=True)
 
     def validate(self,data) : 
         if not data.get("email") and not data.get("username") : 
@@ -79,6 +80,7 @@ class LoginSerializer(serializers.Serializer) :
         refresh_token = RefreshToken.for_user(self.user)
         context["refresh_token"] = str(refresh_token)
         context["access_token"] = str(refresh_token.access_token)
+        context["user"] = UserSerializer(self.user).data
         return context
 
 
