@@ -4,7 +4,7 @@ from django.utils.text import slugify
 class Genre(models.Model) : 
     name = models.CharField(max_length=300,unique=True)
     slug = models.SlugField(null=True,blank=True,max_length=300,unique=True)
-    text = models.TextField()
+    text = models.TextField(null=True,blank=True)
 
     def __str__(self) : 
         return f"{self.name} ( {self.slug} )"

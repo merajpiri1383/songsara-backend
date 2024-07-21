@@ -2,8 +2,8 @@ from django.db import models
 from django.utils.text import slugify
 
 class Artist(models.Model) : 
-    name = models.CharField(max_length=300)
-    slug = models.SlugField(null=True,blank=True)
+    name = models.CharField(max_length=300,unique=True)
+    slug = models.SlugField(null=True,blank=True,unique=True)
     image = models.ImageField(upload_to="artist/images")
     topic = models.CharField(max_length=300,blank=True)
     description = models.TextField(null=True,blank=True)
