@@ -7,7 +7,7 @@ from track.serializers import TrackSerializer
 class MoodSerializer(serializers.ModelSerializer) : 
     class Meta : 
         model = Mood
-        fields = ["id","name","slug","image"]
+        fields = ["id","name","slug","hex_color"]
 
     def __init__(self,instance=None,**kwargs) : 
         if instance : 

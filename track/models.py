@@ -4,6 +4,7 @@ from playlist.models import Playlist
 from album.models import Album
 from mood.models import Mood
 from django.utils.text import slugify
+from genre.models import Genre
 
 class Track(models.Model) : 
     name = models.CharField(max_length = 300,unique=True)
@@ -12,6 +13,7 @@ class Track(models.Model) :
     album = models.ForeignKey(Album,on_delete=models.SET_NULL,related_name="tracks",null=True,blank=True)
     artist = models.ForeignKey(Artist,on_delete=models.CASCADE,related_name="tracks")
     playlist = models.ForeignKey(Playlist,on_delete=models.SET_NULL,related_name="tracks",null=True,blank=True)
+    genre = models.ForeignKey(Genre,on_delete=models.CASCADE,related_name="tracks")
     created = models.DateTimeField(auto_now_add=True)
     moods = models.ManyToManyField(Mood,related_name="tracks",blank=True)
     file = models.FileField(upload_to="track/files")

@@ -8,12 +8,12 @@ class MoodTest(TestBase) :
         super().setUpTestData()
         self.mood = Mood.objects.create(
             name = "mood 1",
-            image = self.image_1
+            hex_color = "dsknfgfsd"
         )
         self.data = {
             "name" : "mood 2",
             "slug" : "mood-2",
-            "image" : self.image_2
+            "hex_color" : "dsdsdff2"
         }
         self.list_url = reverse("mood-list")
         self.detail_url = reverse('mood-detail',args=[self.mood.slug])

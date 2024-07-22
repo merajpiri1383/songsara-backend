@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 class TrackSerializer(serializers.ModelSerializer) : 
     class Meta : 
         model = Track
-        fields = ["id","name","slug","file","image","playlist","artist","album","created"]
+        fields = ["id","name","slug","file","image","genre","playlist","artist","album","created"]
 
     def __init__(self,instance=None,**kwargs) : 
         if instance : 
