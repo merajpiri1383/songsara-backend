@@ -25,7 +25,7 @@ class AlbumSerializer(serializers.ModelSerializer) :
             "id" : instance.artist.id , 
             "name" : instance.artist.name
         }
-        context["tracks"] = TrackSerializer(instance.tracks.all(),many=True).data
+        context["tracks"] = TrackSerializer(instance.tracks.all(),many=True,context=self.context).data
         context["moods"] = moods
         context["created_date"] = instance.created.strftime("%Y-%M-%d")
         return context

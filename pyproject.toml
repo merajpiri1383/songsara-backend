@@ -16,6 +16,7 @@ redis = "^5.0.7"
 python-dotenv = "^1.0.1"
 djangorestframework-simplejwt = "^5.3.1"
 django-cors-headers = "^4.4.0"
+mutagen = "^1.47.0"
 
 
 [tool.poetry.group.dev.dependencies]
