@@ -1,6 +1,7 @@
 from rest_framework import serializers 
 from album.models import Album
 from track.serializers import TrackSerializer 
+from mood import MiniMoodSerializer
 
 class AlbumSerializer(serializers.ModelSerializer) :
     class Meta : 
@@ -26,6 +27,6 @@ class AlbumSerializer(serializers.ModelSerializer) :
             "name" : instance.artist.name
         }
         context["tracks"] = TrackSerializer(instance.tracks.all(),many=True,context=self.context).data
-        context["moods"] = moods
+        context["moods"] = MiniMoodSerializer(instance.moods.all(),many=True).data
         context["created_date"] = instance.created.strftime("%Y-%M-%d")
         return context

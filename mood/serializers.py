@@ -4,7 +4,7 @@ from album.serializers import AlbumSerializer
 from playlist.serializers import PlaylistSerializer
 from track.serializers import TrackSerializer
 
-class MoodSerializer(serializers.ModelSerializer) : 
+class MoodSerializer(serializers.ModelSerializer) :  
     class Meta : 
         model = Mood
         fields = ["id","name","slug","hex_color"]
