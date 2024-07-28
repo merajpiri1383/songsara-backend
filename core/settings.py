@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # internal apps 
+    'track.apps.TrackConfig',
     'user.apps.UserConfig',
     'authentication.apps.AuthenticationConfig',
     'mood.apps.MoodConfig',
@@ -40,7 +41,6 @@ INSTALLED_APPS = [
     'album.apps.AlbumConfig',
     'genre.apps.GenreConfig',
     'playlist.apps.PlaylistConfig',
-    'track.apps.TrackConfig',
     # external apps 
     'rest_framework',
     'drf_spectacular',

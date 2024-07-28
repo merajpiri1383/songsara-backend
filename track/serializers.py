@@ -25,6 +25,10 @@ class TrackSerializer(serializers.ModelSerializer) :
     def to_representation(self,instance) : 
         context = super().to_representation(instance)
         context["created_date"] = instance.created.strftime('%Y-%M-%d')
+        context["genre"] = {
+            "id" : instance.genre.id ,
+            "name" : instance.genre.name
+        }
         context["artist"] = {
             "id" : instance.artist.id , 
             "name" : instance.artist.name
