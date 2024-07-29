@@ -1,8 +1,17 @@
 from rest_framework import serializers 
 from mood.models import Mood
-from album.serializers import AlbumSerializer
-from playlist.serializers import PlaylistSerializer
-from track.serializers import TrackSerializer
+from album.serializers import AlbumSerializer,Album
+from playlist.serializers import PlaylistSerializer,Playlist
+from track.serializers import TrackSerializer,Track
+
+class TotalSerializer(serializers.Serializer) : 
+
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context["track"] = TrackSerializer(instance,context=self.context).data if isinstance(instance,Track) else None 
+        context["playlist"] = PlaylistSerializer(instance,context=self.context).data if isinstance(instance,Playlist) else None
+        context["album"] = AlbumSerializer(instance,context=self.context).data if isinstance(instance,Album) else None
+        return context
 
 class MoodSerializer(serializers.ModelSerializer) :  
     class Meta : 

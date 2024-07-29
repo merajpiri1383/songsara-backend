@@ -15,7 +15,7 @@ class PlaylistSerializer(serializers.ModelSerializer) :
     
     def to_representation(self,instance) : 
         context = super().to_representation(instance)
-        context["genre"] = {"id" : instance.genre.id , "name" : instance.genre.name}
+        context["genre"] = {"id" : instance.genre.id , "name" : instance.genre.name,"slug" : instance.genre.slug}
         context["moods"] = MiniMoodSerializer(instance.moods.all(),many=True).data
         context["created_date"] = instance.created.strftime("%Y-%M-%d")
         context["tracks"] = TrackSerializer(instance.tracks.all(),many=True,context=self.context).data
